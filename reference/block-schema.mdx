@@ -1,0 +1,90 @@
+---
+title: "Runtime Practice Block Schema"
+sidebarTitle: "Block Schema"
+description: "Complete field-by-field reference for the CSBP runtime practice block — the fixed shape every promoted practice must follow in shared-best-practice.txt."
+---
+
+Every promoted practice in `shared-best-practice.txt` uses this exact eight-field block shape. No fields may be omitted. The shape is defined by the compiler protocol and enforced at both formation and manual maintenance.
+
+## Full block shape
+
+```
+id: P001
+status: active
+scope: global
+kind: verification
+applies_when: finishing a task or change
+goal: ensure the change is observable before closing
+do: confirm the effect of the change is visible before marking the task done
+avoid: closing a task without verifying the change has taken effect
+```
+
+## Field reference
+
+<ParamField path="id" type="string" required>
+  Sequential practice identifier in `PNNN` format. Assigned at promotion — never before. Never reused.
+</ParamField>
+
+<ParamField path="status" type="string" required>
+  Runtime eligibility of the practice.
+
+  - `active` — applied when relevant
+  - `deprecated` — excluded from runtime use, available for review
+</ParamField>
+
+<ParamField path="scope" type="string" required>
+  Breadth of relevance.
+
+  - `global` — stable across work contexts
+  - `environment-global` — stable across the current working environment across sessions
+</ParamField>
+
+<ParamField path="kind" type="string" required>
+  Practice category.
+
+  - `environment` — stable environment condition or constraint
+  - `orientation` — setup, framing, or initial approach
+  - `operation` — execution step or working method
+  - `verification` — check, confirmation, or closure practice
+</ParamField>
+
+<ParamField path="applies_when" type="string" required>
+  Operational condition that determines relevance. Describes when — not which project or session. Should be broad enough to match recurrently but specific enough to apply at the right moment.
+</ParamField>
+
+<ParamField path="goal" type="string" required>
+  Intended operational effect. States what the practice is trying to achieve. Used by Codex to interpret the `do` and `avoid` fields in context.
+</ParamField>
+
+<ParamField path="do" type="string" required>
+  Primary correct default action. A direct verb instruction telling Codex what to do when the `applies_when` condition is matched. Short and actionable.
+</ParamField>
+
+<ParamField path="avoid" type="string" required>
+  Recurring competing wrong pattern. Describes the failure mode this practice prevents. Used as a guard during execution.
+</ParamField>
+
+## Status transitions
+
+| From | To | Requires |
+|------|----|----------|
+| `active` | `deprecated` | Operator approval |
+| `deprecated` | removed | Direct operator instruction |
+
+## ID format
+
+`PNNN` means: `P` followed by three zero-padded digits. Sequential from `P001`. The final id is assigned only at operator-approved promotion — never in a proposal draft.
+
+## Block quality rules
+
+<Note>
+One block = one recurring pattern. If a block has two distinct `do` actions or two distinct `avoid` patterns, it must be split before promotion. Each field should be short enough to apply during real work — not a paragraph.
+</Note>
+
+## Multiple practice blocks
+
+`shared-best-practice.txt` may contain any number of blocks, separated by blank lines between blocks. Deprecated blocks remain in the file below active ones for maintenance history.
+
+<Card title="Admission and Rejection Criteria" icon="filter" href="/reference/admission-criteria">
+  Learn the full set of criteria a candidate practice must meet to be admitted into CSBP, and the conditions that cause automatic rejection.
+</Card>

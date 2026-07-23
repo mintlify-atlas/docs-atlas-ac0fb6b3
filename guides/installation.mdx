@@ -1,0 +1,94 @@
+---
+title: "Install CSBP in Your Codex Project"
+sidebarTitle: "Installation"
+description: "Set up the three CSBP files in your Codex environment and bootstrap the protocol from AGENTS.md to activate best practice support."
+---
+
+Installing CSBP means placing three plain-text files in the right location and wiring the entry point into your `AGENTS.md` so that every fresh Codex session bootstraps the protocol automatically. There is nothing to install or compile — CSBP is entirely file-based, and the full system activates the moment Codex reads `CSBP-entry-point.txt` at session start.
+
+## Prerequisites
+
+Before installing CSBP, confirm the following:
+
+- A working Codex setup with a `.codex/` directory in your project.
+- An `AGENTS.md` file that Codex reads at the start of each session.
+- Write access to add files under `.codex/`.
+
+No package installation is required. CSBP is plain text files — no dependencies, no build step.
+
+## File layout
+
+Place the three CSBP files under `.codex/memories/`:
+
+```text
+.codex/
+  memories/
+    CSBP-entry-point.txt
+    shared-best-practice.txt
+    shared-best-practice-compiler.txt
+```
+
+The exact path can vary to suit your project structure. What matters is that `CSBP-entry-point.txt` is in a location that Codex can read, and that `AGENTS.md` references it correctly.
+
+## Step-by-step installation
+
+<Steps>
+  <Step title="Download the files">
+    Copy the three files from the [CSBP repository](https://github.com/xxyoudeadpunkxx/csbp-codex-shared-best-practice) into your `.codex/memories/` directory.
+
+    The three files and their roles are:
+
+    | File | Role |
+    |---|---|
+    | `CSBP-entry-point.txt` | Bootstrap and routing layer. Defines the system, authority order, load order, usage modes, and write restrictions. Read first, every session. |
+    | `shared-best-practice.txt` | Runtime store. Holds promoted practices only. Starts empty — that is the correct initial state. |
+    | `shared-best-practice-compiler.txt` | Practice formation layer. Evaluates, normalizes, and promotes candidate practices. Only loaded when you open practice formation. |
+  </Step>
+
+  <Step title="Wire the entry point into AGENTS.md">
+    Add a reference to `CSBP-entry-point.txt` in your `.codex/AGENTS.md` so Codex reads it before doing any CSBP-guided work. A minimal example:
+
+    ```markdown .codex/AGENTS.md
+    # AGENTS.md
+
+    ## Shared Best Practice
+    Load and follow the shared best practice protocol:
+    .codex/memories/CSBP-entry-point.txt
+    ```
+
+    The exact phrasing depends on your host environment contract. The key requirement is that Codex reads `CSBP-entry-point.txt` before using CSBP — that read is what activates the protocol for the session.
+  </Step>
+
+  <Step title="Verify the runtime file exists">
+    Confirm that `shared-best-practice.txt` is present and readable in its expected location. Open the file and check its contents.
+
+    A freshly installed `shared-best-practice.txt` contains the file header and role definitions but no practice blocks. That is the correct empty state — it means no practices have been promoted yet. Codex will continue without CSBP runtime guidance until practices are formed and approved.
+  </Step>
+
+  <Step title="Confirm the compiler file is present but not auto-loaded">
+    Verify that `shared-best-practice-compiler.txt` is present at the expected path.
+
+    This file must exist so Codex can load it when you open practice formation — but Codex should **not** read it during normal work sessions. The entry point enforces this separation: the compiler is only activated when you explicitly ask for practice formation, revision, deprecation, or removal work.
+
+    Do not reference `shared-best-practice-compiler.txt` directly in `AGENTS.md`. It is loaded on-demand, not at session start.
+  </Step>
+</Steps>
+
+## What not to modify
+
+<Warning>
+  Never modify `CSBP-entry-point.txt` or `shared-best-practice-compiler.txt`. These are fixed system-definition layers. Changing them breaks the protocol guarantees — the separation between bootstrap, runtime, and formation behavior depends on them remaining stable.
+
+  Only `shared-best-practice.txt` is mutable at runtime. All changes to it must go through the formation process or a manual maintenance pass that follows the same rules.
+</Warning>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Practice Formation" icon="flask" href="/guides/practice-formation">
+    Learn how to propose, evaluate, and promote a recurring operational pattern into the runtime layer.
+  </Card>
+  <Card title="Runtime Usage" icon="play" href="/guides/runtime-usage">
+    See how CSBP applies promoted practices passively during live Codex sessions.
+  </Card>
+</CardGroup>

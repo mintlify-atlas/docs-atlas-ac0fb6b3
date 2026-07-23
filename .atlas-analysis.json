@@ -1,0 +1,75 @@
+{
+  "projectType": "general",
+  "projectName": "Codex Shared Best Practice (CSBP)",
+  "projectDescription": "A lightweight three-file protocol kit for maintaining a controlled, operator-approved shared memory layer for recurring Codex best practices across sessions.",
+  "theme": "luma",
+  "primaryColor": "#4F46E5",
+  "lightColor": "#EEF2FF",
+  "darkColor": "#1E1B4B",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guide",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "introduction",
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Core Concepts",
+            "pages": [
+              "concepts/three-file-system",
+              "concepts/authority-model",
+              "concepts/runtime-behavior",
+              "concepts/practice-lifecycle"
+            ]
+          },
+          {
+            "group": "Using CSBP",
+            "pages": [
+              "guides/installation",
+              "guides/practice-formation",
+              "guides/runtime-usage",
+              "guides/manual-maintenance"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "reference/entry-point",
+              "reference/runtime-file",
+              "reference/compiler-protocol",
+              "reference/admission-criteria",
+              "reference/block-schema"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Three-file layered protocol: entry point, runtime store, and compiler",
+    "Operator-approval-gated practice promotion — no silent persistence",
+    "Explicit authority hierarchy below operator instruction and AGENTS.md",
+    "Strict admission and rejection criteria for recurring operational patterns",
+    "Compiler-driven practice lifecycle: promote, revise, deprecate, remove",
+    "Lightweight design — compiler only loads when explicitly needed",
+    "Manual maintenance path with same admission rules enforced",
+    "Conflict resolution that always defers to higher-authority instructions"
+  ],
+  "publicApiSurface": [
+    "CSBP-entry-point.txt — bootstrap and routing layer",
+    "shared-best-practice.txt — promoted runtime practice store",
+    "shared-best-practice-compiler.txt — practice formation and evaluation layer",
+    "Runtime block fields: id (PNNN), status, scope, kind, applies_when, goal, do, avoid",
+    "Scope values: global, environment-global",
+    "Kind values: environment, orientation, operation, verification",
+    "Status values: active, deprecated",
+    "Lifecycle operations: promote, revise, deprecate, remove, reject",
+    "Proposal shape: candidate, kind, scope, rationale, proposed block",
+    "Authority chain: operator instruction > AGENTS.md > local project instructions > CSBP"
+  ]
+}

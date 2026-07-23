@@ -1,0 +1,73 @@
+---
+title: "CSBP: A Controlled Best Practice Layer for Codex"
+sidebarTitle: "Introduction"
+description: "Learn what CSBP is, why it exists, and how it solves the persistent-memory problem for long-lived Codex setups."
+---
+
+CSBP (Codex Shared Best Practice) is a lightweight three-file protocol kit that gives Codex a controlled middle layer for recurring operational best practices. It sits between automatic memory and `AGENTS.md` — separate from both chat history and host contract — and exists precisely to keep useful patterns explicit, reviewed, and operator-approved before they can influence future sessions.
+
+## The problem it solves
+
+Long-lived Codex setups usually fail in two opposite ways:
+
+- Useful guidance stays **buried in chat history** — it helps once, then disappears, and the same pattern has to be re-explained every session.
+- Useful guidance gets **promoted too hastily into `AGENTS.md`** — a one-off fix or rough observation enters the host contract before it has been properly reviewed or proven to recur.
+
+A third failure mode is worse than either of those.
+
+<Warning>
+**Silent persistence.** Session residue, operator preferences, one-off fixes, and rough observations can start shaping future Codex behavior through automatic memory systems — without enough review, without operator approval, and without a clear record of what changed or why. This is the failure mode CSBP is designed to prevent.
+</Warning>
+
+CSBP does the opposite. Instead of writing itself, it requires a deliberate formation path and explicit operator approval before any practice can influence runtime behavior.
+
+## What CSBP is
+
+CSBP is a controlled middle layer for recurring operational practices that are strong enough to reuse, but not strong enough to become host contract.
+
+It sits below every higher-authority layer in the Codex authority chain:
+
+```text
+operator instruction
+AGENTS.md
+local project instructions
+CSBP
+```
+
+CSBP is below all of these. It never overrides higher-authority instructions. If any CSBP practice conflicts with operator instruction, `AGENTS.md`, or local project guidance, the conflicting CSBP item is not applied. Runtime practices do not define policy, scope, or authority.
+
+During normal work, CSBP reads two files — the entry point and the runtime store — and applies already-promoted active practices only when their `applies_when` condition matches the current work. If there are no active relevant practices, Codex continues without CSBP runtime guidance. No active match means no forced behavior.
+
+## What CSBP is not
+
+<Note>
+CSBP is not automatic memory. It does not write itself, it does not capture session carryover in the background, and it does not silently promote anything. It is not a second `AGENTS.md` — it carries less authority and a narrower scope than the host contract. It is not a place to store every useful thought. CSBP is useful because it says **no** — to vague material, project-specific detail, one-off fixes, policy-like statements, and anything that has not passed through the formation path with operator approval.
+</Note>
+
+## The three files
+
+<CardGroup cols={3}>
+  <Card title="CSBP-entry-point.txt" icon="door-open">
+    The bootstrap and routing layer. Defines what CSBP is, the authority order, usage modes, read order, and write restrictions. Read first, every session.
+  </Card>
+  <Card title="shared-best-practice.txt" icon="bookmark">
+    The runtime layer. Stores only already-promoted practices. Active practices may guide work when their `applies_when` condition matches. Read immediately after the entry point.
+  </Card>
+  <Card title="shared-best-practice-compiler.txt" icon="flask">
+    The formation layer. Evaluates, normalizes, promotes, revises, deprecates, removes, or rejects candidate practices. Loaded only when the operator explicitly opens practice formation or maintenance work.
+  </Card>
+</CardGroup>
+
+The split between these files is intentional. The runtime layer applies approved practices. The compiler layer decides whether a new or revised practice deserves to exist. Those jobs must not collapse into each other.
+
+## Key guarantees
+
+- **No background writer.** CSBP has no mechanism that creates or promotes practices without an explicit operator request.
+- **No silent promotion.** A candidate practice cannot enter `shared-best-practice.txt` without passing through the formation path and receiving operator approval.
+- **No practice changes without operator approval.** This applies to promotion, revision, deprecation, and removal alike.
+- **Compiler only loads when explicitly needed.** During normal runtime, `shared-best-practice-compiler.txt` is not read. It is loaded only when practice formation or maintenance work is required.
+- **Conflict always defers to higher authority.** If any CSBP item conflicts with operator instruction, `AGENTS.md`, or local project instructions, the CSBP item is not applied.
+
+<Tip>
+Ready to set up CSBP in your environment? The [Quickstart](/quickstart) walks through installing the three files, wiring the entry point into `AGENTS.md`, and verifying the setup works in a live Codex session.
+</Tip>

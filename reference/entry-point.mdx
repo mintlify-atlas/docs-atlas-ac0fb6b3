@@ -1,0 +1,88 @@
+---
+title: "CSBP-entry-point.txt: Bootstrap and Routing Layer"
+sidebarTitle: "Entry Point"
+description: "Complete reference for CSBP-entry-point.txt — the fixed bootstrap file that defines system identity, authority order, load order, and write restrictions."
+---
+
+`CSBP-entry-point.txt` is the first file read every session. It bootstraps CSBP by defining what the system is, how it is loaded, what authority it has, and which writes are prohibited. It is a fixed layer — never modified.
+
+## File identity
+
+| Property | Value |
+|----------|-------|
+| Name | `CSBP-entry-point.txt` |
+| Version | 0.1 |
+| Role | Bootstrap and routing layer |
+| Mutable | No |
+
+## System definition
+
+CSBP is an AI-only three-file system for storing, applying, and promoting shared operational best practices across sessions.
+
+The system includes three files:
+
+- `CSBP-entry-point.txt`
+- `shared-best-practice-compiler.txt`
+- `shared-best-practice.txt`
+
+No prior CSBP context is assumed at the start of a session. CSBP behavior must not be inferred from filenames alone — system-definition and layer-role resolution must be completed by reading this file.
+
+## Authority order
+
+CSBP is lower-authority than the operating contract around it. The full authority chain is:
+
+```
+operator instruction > AGENTS.md > local project instructions or project-local guidance > CSBP
+```
+
+CSBP never overrides higher-authority instructions. Runtime practices do not define policy, scope, or authority.
+
+## Layer roles
+
+| File | Role |
+|------|------|
+| `CSBP-entry-point.txt` | Bootstrap and routing layer |
+| `shared-best-practice-compiler.txt` | Practice formation layer |
+| `shared-best-practice.txt` | Promoted runtime practice layer |
+
+## Usage modes
+
+The entry point defines two distinct modes of operation:
+
+- **Runtime mode** — use `shared-best-practice.txt` to apply already-promoted practices. This is the default mode loaded after reading the entry point. Active practices may guide work when their `applies_when` condition matches the current work.
+
+- **Practice formation mode** — use `shared-best-practice-compiler.txt` for practice formation work. This mode is loaded only when the operator explicitly opens practice formation or maintenance work (evaluate, normalize, revise, promote, deprecate, remove, or reject).
+
+## Entry rules
+
+The following rules are defined in the ENTRY RULE and ENTRY DECISION sections of the file:
+
+- Read this file first
+- Do not infer CSBP behavior from filenames alone
+- Do not skip system-definition or layer-role resolution
+- Reading this file activates CSBP for the current session
+- After reading this file, load runtime mode
+- Load practice formation mode only when practice formation work is required
+
+## Read order
+
+1. Read `CSBP-entry-point.txt`
+2. Read `shared-best-practice.txt` for runtime use
+3. Read `shared-best-practice-compiler.txt` only for practice formation work
+
+## Write restrictions
+
+<Warning>
+The WRITE RULE from `CSBP-entry-point.txt` applies at all times:
+
+- Do not modify `CSBP-entry-point.txt`
+- Do not modify `shared-best-practice-compiler.txt`
+- Runtime practice changes must follow `shared-best-practice-compiler.txt`
+- Do not add or revise a runtime practice without operator approval
+- Do not promote a practice without operator approval
+- Do not deprecate or remove a practice without operator approval
+</Warning>
+
+## Conflict rule
+
+If any CSBP item conflicts with operator instruction, `AGENTS.md`, or local project instructions or project-local guidance, do not apply the conflicting CSBP item.

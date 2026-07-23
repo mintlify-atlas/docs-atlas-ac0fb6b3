@@ -1,0 +1,60 @@
+---
+title: "Admission and Rejection Criteria for CSBP Practices"
+sidebarTitle: "Admission Criteria"
+description: "The full list of criteria a candidate practice must meet to be admitted into CSBP, and the conditions that cause automatic rejection."
+---
+
+The admission and rejection criteria are the core filter that makes CSBP useful. A practice only enters the runtime file if it clears every admission criterion. Rejection is not a failure — it is the system working correctly.
+
+## Admission criteria
+
+A candidate is admitted when it is:
+
+- Recurring across sessions
+- Global or environment-global
+- Actionable during real work
+- Preventive by default
+- Expressible as a short operational instruction telling what to do
+- Stable across work contexts
+- Not already covered by `AGENTS.md`
+- Not already covered by a stronger local instruction
+- Likely to reduce recurring waste or error
+
+<Tip>
+If a candidate cannot be expressed as a short, direct operational instruction, it probably needs splitting, narrowing, or rejection.
+</Tip>
+
+## Rejection criteria
+
+Reject material that is:
+
+- Project-specific
+- Session-specific
+- One-off
+- Vague
+- Diagnostic-only
+- Recovery-only
+- Post-failure only
+- Duplicate of an existing practice
+- Duplicate of `AGENTS.md`
+- Duplicate of local project instructions
+- Too broad to match reliably
+- Too narrow to matter outside one case
+- Conflicts with higher-authority instructions
+- Depends on hidden or unstable context
+- Reads like explanation instead of instruction
+- Reads like policy instead of operational correction
+
+<Warning>
+CSBP is useful because it says no. The rejection list is as important as the admission list.
+</Warning>
+
+## Borderline cases
+
+<Accordion title="Handling borderline candidates">
+Borderline candidates should be narrowed or split. A pattern that is partly session-specific and partly global should be extracted to its global core. A pattern that covers two separate wrong behaviors should be split into two blocks. When in doubt, reject and reopen when more recurrence evidence exists.
+</Accordion>
+
+## Why strict criteria matter
+
+A practice that passes the filter will be present in every future session where its `applies_when` condition matches. A weak practice creates noise and erodes trust in the layer. The filter exists to protect signal quality.

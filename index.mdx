@@ -1,20 +1,78 @@
 ---
-title: "Introduction"
-description: "Welcome to your project"
+title: "CSBP: Controlled Best Practice Layer for Codex"
+sidebarTitle: "Home"
+description: "CSBP is a three-file protocol kit that gives Codex a controlled, operator-approved shared memory layer for recurring operational best practices."
 ---
 
-Write a short description of your product here. What it does, who it's for, and what they can accomplish with it.
+CSBP (Codex Shared Best Practice) is a lightweight protocol that sits between your `AGENTS.md` and chat history — giving Codex a place to store recurring operational practices that are strong enough to reuse, but not strong enough to become part of your host contract. Every practice must pass through an explicit formation and approval process before it can guide runtime behavior.
 
-<Tip>
-  Ready to make this your own? Start by editing this page. Update your `docs.json` file to customize your site. Then fill out the [Quickstart](/quickstart) page.
-</Tip>
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Install CSBP in your Codex setup and wire it up in five minutes.
+  </Card>
+  <Card title="Three-File System" icon="files" href="/concepts/three-file-system">
+    Understand how the entry point, runtime file, and compiler work together.
+  </Card>
+  <Card title="Practice Formation" icon="flask" href="/guides/practice-formation">
+    Learn how to propose, evaluate, and promote a new best practice.
+  </Card>
+  <Card title="Block Schema" icon="table" href="/reference/block-schema">
+    Full reference for every field in a runtime practice block.
+  </Card>
+</CardGroup>
 
-<Card title="Quickstart" icon="rocket" href="/quickstart">
-  This card links to the quickstart page in your project.
-</Card>
-<Card title="Components" icon="puzzle-piece" href="https://mintlify.com/docs/components">
-  Add cards, callouts, steps, tabs, and more to design and structure your pages.
-</Card>
-<Card title="Settings" icon="gear" href="https://mintlify.com/docs/organize/settings">
-  Set your site name, branding, and navigation in the `docs.json` file.
-</Card>
+## Why CSBP?
+
+Long-lived Codex setups fail in predictable ways. Useful guidance stays buried in chat history, or gets promoted too quickly into `AGENTS.md`. Worse, some systems let session residue silently shape future behavior without review.
+
+CSBP is the alternative: a controlled middle layer that says **no** by default.
+
+<CardGroup cols={3}>
+  <Card title="No silent writes" icon="lock">
+    Codex never modifies the runtime file without operator approval.
+  </Card>
+  <Card title="Explicit authority" icon="shield">
+    CSBP is always lower-authority than operator instruction and `AGENTS.md`.
+  </Card>
+  <Card title="Lightweight" icon="feather">
+    The compiler loads only when you explicitly open practice formation work.
+  </Card>
+</CardGroup>
+
+## How it works
+
+<Steps>
+  <Step title="Install the three files">
+    Copy `CSBP-entry-point.txt`, `shared-best-practice.txt`, and `shared-best-practice-compiler.txt` into your `.codex/memories/` directory.
+  </Step>
+  <Step title="Bootstrap from AGENTS.md">
+    Wire `CSBP-entry-point.txt` into your `.codex/AGENTS.md` so every fresh session loads CSBP before doing anything else.
+  </Step>
+  <Step title="Run in runtime mode">
+    During normal work, CSBP reads `shared-best-practice.txt` and applies any active practices whose `applies_when` condition matches the current work.
+  </Step>
+  <Step title="Form practices when needed">
+    When you identify a recurring pattern, open practice formation mode. Codex evaluates the candidate against the compiler rules and proposes a normalized block — you approve or reject it.
+  </Step>
+</Steps>
+
+<Note>
+  CSBP is not a memory system that writes itself. The runtime file only changes after you explicitly approve a practice through the formation process.
+</Note>
+
+## Explore the docs
+
+<CardGroup cols={2}>
+  <Card title="Authority Model" icon="sitemap" href="/concepts/authority-model">
+    See exactly where CSBP sits in the Codex authority hierarchy.
+  </Card>
+  <Card title="Runtime Behavior" icon="play" href="/concepts/runtime-behavior">
+    How CSBP reads and applies practices during a live session.
+  </Card>
+  <Card title="Admission Criteria" icon="filter" href="/reference/admission-criteria">
+    What gets in, what gets rejected, and why the filter matters.
+  </Card>
+  <Card title="Manual Maintenance" icon="wrench" href="/guides/manual-maintenance">
+    Edit `shared-best-practice.txt` directly without using the compiler.
+  </Card>
+</CardGroup>

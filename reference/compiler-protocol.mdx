@@ -1,0 +1,124 @@
+---
+title: "shared-best-practice-compiler.txt: Formation Protocol"
+sidebarTitle: "Compiler Protocol"
+description: "Reference for the CSBP compiler — the fixed formation layer that governs how candidate practices are evaluated, normalized, promoted, deprecated, and removed."
+---
+
+`shared-best-practice-compiler.txt` is the practice formation layer. It defines the rules for evaluating candidates, normalizing them into runtime block shape, and managing the full practice lifecycle. It is a fixed file — never modified.
+
+## File identity
+
+| Property | Value |
+|----------|-------|
+| Name | `shared-best-practice-compiler.txt` |
+| Version | 0.1 |
+| Role | Practice formation and evaluation |
+| Mutable | No — fixed system-definition layer |
+
+## Object and non-object
+
+**The compiler is for:**
+
+- Evaluate recurring global or environment-global operational best practices
+- Normalize candidates into runtime block shape
+- Promote valid candidates to `shared-best-practice.txt`
+- Revise candidates where wording, scope, or split needs work
+- Deprecate active practices that no longer meet criteria
+- Remove deprecated or invalid practices from `shared-best-practice.txt`
+- Reject candidates that are not suitable for shared runtime practice
+
+**The compiler is not for:**
+
+- Replacing `AGENTS.md`
+- Storing project-specific instructions
+- Storing policy, tone, or style guidance
+- Storing one-off fixes
+- Storing speculative advice
+
+## Input types
+
+The compiler accepts the following inputs from the operator:
+
+- Operator observation
+- Free-text description
+- Conversation fragment
+- Rough hypothesis
+- Reported recurring mistake
+- Reported recurring omission
+- Reported recurring missed opportunity during real work
+
+## Compiler decisions
+
+There are five possible decision outcomes:
+
+- **`promote`** — candidate is ready for runtime use and enters `shared-best-practice.txt`
+- **`revise`** — candidate is valid but wording, scope, or split needs work; revision happens in the same working pass
+- **`reject`** — candidate is not suitable for shared runtime practice
+- **`deprecate`** — active practice becomes deprecated; excluded from runtime use
+- **`remove`** — deprecated or invalid practice is deleted from `shared-best-practice.txt`
+
+## Normalization rules
+
+Candidate practices must be normalized before promotion. The compiler applies the following rules:
+
+- Rewrite as a preventive default
+- Rewrite as a runtime-ready instruction
+- Keep one pattern per practice
+- Remove narrative
+- Remove non-operational explanation
+- Remove project-specific detail
+- Prefer short stable wording
+- Prefer direct verbs
+- Avoid fallback phrasing
+- Avoid recovery-first phrasing
+
+## Field rules
+
+<ParamField path="id" type="string" required>
+  Use `PNNN` sequential format. Assigned only at operator-approved promotion — never in a proposal draft. Never reused.
+</ParamField>
+
+<ParamField path="scope" type="string" required>
+  Classify the practice as `global` or `environment-global`.
+</ParamField>
+
+<ParamField path="kind" type="string" required>
+  Classify the primary role of the practice for runtime interpretation.
+</ParamField>
+
+<ParamField path="applies_when" type="string" required>
+  Describe the operational condition, not the project.
+</ParamField>
+
+<ParamField path="goal" type="string" required>
+  State the intended operational effect.
+</ParamField>
+
+<ParamField path="do" type="string" required>
+  State the primary correct default action.
+</ParamField>
+
+<ParamField path="avoid" type="string" required>
+  State the recurring wrong pattern.
+</ParamField>
+
+## Block quality rules
+
+<Note>
+One practice = one recurring pattern. Split if more than one main action or wrong pattern is present. Rewrite or reject if too broad, too narrow, overly explanatory, or not usable during real work.
+</Note>
+
+## Lifecycle
+
+```
+candidate  -> evaluate -> normalize -> promote | reject
+active     -> revise
+active     -> deprecate
+deprecated -> remove
+```
+
+## Maintenance rule
+
+<Warning>
+All runtime practice maintenance uses this compiler protocol. Revisions, status changes, and removals all require operator approval. Practices are not removed automatically.
+</Warning>

@@ -1,0 +1,155 @@
+---
+title: "Form and Promote a Best Practice with CSBP"
+sidebarTitle: "Practice Formation"
+description: "Learn how to propose, evaluate, normalize, and promote a recurring operational pattern into CSBP's runtime layer with operator approval."
+---
+
+Practice formation is the process by which a recurring observation becomes a normalized, operator-approved runtime practice in `shared-best-practice.txt`. A raw pattern — noticed across sessions, flagged during a review, or surfaced from a recurring mistake — enters the formation process as a candidate and exits either as a promoted practice block or a rejection. Nothing enters the runtime store without passing through that gate and receiving your explicit approval.
+
+## When to open formation
+
+Formation is triggered in two common ways:
+
+1. **You notice a recurring mistake or missed step across sessions.** A pattern keeps appearing — Codex misses the same check, rediscovers the same default, or repeats the same wrong move. That recurrence is a signal worth examining.
+2. **After a block of work, you ask Codex to review the session for patterns worth persisting.** Codex can scan the session for candidates, but it does not promote them — it proposes them for your review.
+
+<Tip>
+  Formation only starts when you ask for it. Codex never opens formation mode on its own. It does not silently accumulate candidates, queue promotions, or prepare blocks in the background. The formation process is always operator-initiated.
+</Tip>
+
+## The promotion path
+
+<Steps>
+  <Step title="Raise the candidate">
+    Describe the pattern to Codex in plain language. You do not need to format it as a block or know the field names. Valid inputs include:
+
+    - An operator observation ("Codex keeps skipping the final check")
+    - A free-text description of a recurring pattern
+    - A fragment from an earlier conversation
+    - A reported recurring mistake or omission during real work
+
+    Codex will interpret the input and identify the likely underlying operational pattern.
+  </Step>
+
+  <Step title="Codex evaluates">
+    Codex checks the candidate against the compiler's admission and rejection criteria:
+
+    - **Is it recurring?** A one-off does not qualify.
+    - **Is it global or environment-global?** Project-specific or session-specific patterns are rejected.
+    - **Is it actionable?** The practice must be usable during real work, not just diagnostic or explanatory.
+    - **Is it preventive?** The practice should tell Codex what to do by default, not how to recover after failure.
+    - **Is it not already covered by `AGENTS.md` or a local instruction?** Duplicating higher-authority instructions adds no value.
+
+    Codex may also reinterpret the pattern, split it into multiple candidates, narrow or broaden the formulation, or classify it as too weak in recurrence, scope, or clarity for promotion.
+  </Step>
+
+  <Step title="Normalization">
+    If the candidate passes evaluation, the compiler rewrites it as a runtime-ready instruction using the standard block shape. Normalization rules:
+
+    - One pattern per block — if more than one action or wrong pattern is present, the candidate is split
+    - Preventive framing — written as a default to apply, not a recovery after failure
+    - Direct verbs — short, stable wording with clear action words
+    - No narrative — explanation and rationale are removed from the runtime block itself
+    - No fallback phrasing — the block should read as a positive default, not a conditional workaround
+  </Step>
+
+  <Step title="Review the proposed block">
+    Codex presents the normalized block in the full field shape. Review it carefully before approving:
+
+    - Does `applies_when` describe the right operational condition?
+    - Does `do` reflect the correct default action?
+    - Does `avoid` name the actual wrong pattern?
+    - Is the `kind` classification accurate?
+    - Is the `scope` right — global or environment-global?
+
+    The `id` field will show a placeholder at this stage. The `PNNN` identifier is only assigned at promotion.
+  </Step>
+
+  <Step title="Approve or reject">
+    You decide. The operator's approval is required — Codex cannot promote a practice on its own.
+
+    - **If you approve**, the block enters `shared-best-practice.txt` with a sequential `PNNN` id assigned at that point.
+    - **If you reject**, the candidate is discarded. No changes are made to the runtime store.
+    - **If you ask for revision**, the cycle repeats from the normalization step. Codex revises wording, scope, or split, and presents an updated proposal.
+  </Step>
+</Steps>
+
+## Proposal shape
+
+When Codex presents a formation proposal, it uses this shape:
+
+```
+candidate:      short description of the pattern
+kind:           environment | orientation | operation | verification
+scope:          global | environment-global
+rationale:      one short operational sentence
+proposed block: full block shape draft
+```
+
+The `id` is left unassigned in the proposal. It is assigned only when you approve promotion.
+
+## Example formation session
+
+**Operator raises the candidate:**
+
+> "Codex keeps missing a verification step when finishing a task. It should always confirm the change is visible before closing."
+
+**Codex evaluates:**
+
+- Recurring across sessions — yes, this pattern appeared multiple times.
+- Global scope — applies to task completion generally, not to a specific project.
+- Actionable — can be applied as a concrete check during real work.
+- Preventive — framed as a step to take before closing, not a recovery after an error.
+- Not in `AGENTS.md` — no existing instruction covers this.
+
+**Compiler produces a normalized block draft:**
+
+```
+candidate:      confirm change visibility before closing a task
+kind:           verification
+scope:          global
+rationale:      prevents closing tasks without confirming the change is actually observable
+proposed block:
+  id:           (unassigned)
+  status:       active
+  scope:        global
+  kind:         verification
+  applies_when: finishing a task or change
+  goal:         ensure the change is observable before the task is closed
+  do:           confirm the change is visible before marking the task done
+  avoid:        closing the task without verifying the effect is visible
+```
+
+**Operator approves.** The block is assigned id `P001` and written to `shared-best-practice.txt`:
+
+```
+id: P001
+status: active
+scope: global
+kind: verification
+applies_when: finishing a task or change
+goal: ensure the change is observable before the task is closed
+do: confirm the change is visible before marking the task done
+avoid: closing the task without verifying the effect is visible
+```
+
+## What gets rejected
+
+<Accordion title="Common rejection reasons">
+  A candidate is rejected when it matches any of the following:
+
+  - **Project-specific** — only relevant to one codebase, one team, or one setup
+  - **Session-specific** — only relevant to the current conversation or task
+  - **One-off** — occurred once; no evidence of recurrence
+  - **Vague** — cannot be applied as a concrete action during real work
+  - **Diagnostic-only** — tells Codex how to identify a problem, not how to avoid it
+  - **Recovery-only** — tells Codex how to fix a failure, not how to prevent it
+  - **Duplicate** — already covered by an existing practice, `AGENTS.md`, or a local instruction
+  - **Too broad** — applies to so many situations it cannot match reliably
+  - **Too narrow** — only meaningful in a single edge case that will not recur
+  - **Conflicts with higher-authority instructions** — contradicts operator instruction, `AGENTS.md`, or local project guidance
+</Accordion>
+
+<Note>
+  See [Admission Criteria](/reference/admission-criteria) for the full list of admit and reject rules used by the compiler.
+</Note>

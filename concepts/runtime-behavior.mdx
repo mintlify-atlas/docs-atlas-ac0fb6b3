@@ -1,0 +1,73 @@
+---
+title: "Runtime Behavior: How CSBP Applies Practices During Work"
+sidebarTitle: "Runtime Behavior"
+description: "During a live session, CSBP reads active practices from shared-best-practice.txt and applies them only when their applies_when condition matches the current work."
+---
+
+During normal work, CSBP does not create new practices. It does not evaluate candidates, it does not revise existing entries, and it does not write anything to any file. It only applies already-promoted active practices — and only when their `applies_when` condition matches the current operation. If no active practice is relevant, CSBP contributes nothing to the session and Codex continues without it.
+
+## Read order
+
+When CSBP reads `shared-best-practice.txt` during a session, it follows a strict sequence for each practice block:
+
+1. **Check `status`** — if the block is `deprecated`, skip it immediately. Deprecated practices are not eligible for runtime use regardless of their content.
+2. **Check `applies_when`** — evaluate the operational condition. If it does not match what is currently being done, skip the block.
+3. **Use `goal` to interpret the practice's intended effect** — understand what the practice is trying to achieve before applying it.
+4. **Apply `do` as the primary default action** — this is the main instruction. When the practice is active and relevant, `do` is what Codex follows by default.
+5. **Use `avoid` as the guard against the recurring wrong pattern** — `avoid` identifies the failure mode the practice is designed to prevent. It acts as a check against the competing pattern that the practice was created to stop.
+
+The sequence is not optional. Skipping the status check before the `applies_when` check, or applying `do` before reading `goal`, breaks the intended reading order.
+
+## Active vs deprecated
+
+Each practice block carries a `status` field with one of two values:
+
+| Status | Runtime behavior |
+|---|---|
+| `active` | Eligible for runtime use. The block is read fully, `applies_when` is evaluated, and the practice may guide current work. |
+| `deprecated` | Excluded from runtime use. The block is skipped immediately after the status check. It remains in the file for review history and maintenance reference. |
+
+Deprecated practices are not deleted. They stay in `shared-best-practice.txt` so they are available for review during maintenance work. But they contribute nothing to active sessions.
+
+## Empty state
+
+<Note>
+  If `shared-best-practice.txt` contains no active practices that are relevant to the current work, Codex continues without CSBP runtime guidance. No active match means no forced behavior. CSBP does not manufacture guidance when no relevant practice exists — the session proceeds normally without it.
+</Note>
+
+## What runtime mode cannot do
+
+<Warning>
+  Runtime mode must not invent, revise, promote, deprecate, or remove practices silently. Runtime practices are read-only during normal work. Any change to `shared-best-practice.txt` — adding a practice, revising a block, deprecating an entry, or removing one — requires practice formation mode and operator approval. Runtime mode has no authority to write to any CSBP file.
+</Warning>
+
+## Mode separation
+
+CSBP operates in two distinct modes. They must stay separate. Runtime mode cannot borrow formation logic, and formation mode does not behave as active runtime policy.
+
+| Mode | Primary file | Purpose | Can do | Must not do |
+|---|---|---|---|---|
+| Runtime mode | `shared-best-practice.txt` | Apply already-promoted practices. | Guide decisions when `applies_when` matches current work. | Invent, revise, promote, deprecate, or remove practices silently. |
+| Practice formation mode | `shared-best-practice-compiler.txt` | Evaluate and shape candidate practices. | Propose promotion, revision, deprecation, rejection, or removal. | Auto-promote without operator approval or behave as active runtime policy. |
+
+Formation mode is only loaded when the operator explicitly starts practice formation or maintenance work. It does not run in the background. It is not active by default.
+
+## Scope values
+
+Every practice block includes a `scope` field that signals how broadly the practice applies:
+
+- **`global`** — the practice is stable across work contexts. It applies regardless of the specific environment, project, or working setup in a session. A global practice is not tied to any particular context and should hold wherever the operational condition it describes can arise.
+- **`environment-global`** — the practice applies across the current working environment across sessions. It is tied to the environment rather than a specific project or task. It persists across sessions within that environment but does not necessarily extend beyond it.
+
+Scope is assigned during formation and normalization. It is part of what the compiler evaluates when deciding whether a candidate is strong enough for promotion.
+
+## Kind values
+
+Every practice block includes a `kind` field that identifies the primary role of the practice for runtime interpretation:
+
+| Kind | Meaning | Example use case |
+|---|---|---|
+| `environment` | A stable environment condition, constraint, or affordance. Describes something about the working environment that should always be accounted for. | Noting a persistent tool constraint or environment-level limitation that affects how work is done. |
+| `orientation` | A setup, framing, or initial approach. Applies at the start of a task or working session before execution begins. | A default for how to frame or approach a category of work before diving in. |
+| `operation` | An execution step or working method during real work. Applies during active task execution. | A default action to take at a specific point during a recurring operational pattern. |
+| `verification` | A check, confirmation, or closure practice. Applies after execution to confirm the work is correct or complete. | A step to verify output or confirm a condition before closing out a task. |

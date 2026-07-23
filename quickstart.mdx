@@ -1,47 +1,85 @@
 ---
-title: "Quickstart"
-description: "Begin with a guide on the fastest path to a successful outcome"
+title: "Get Started with CSBP in Your Codex Setup"
+sidebarTitle: "Quickstart"
+description: "Install CSBP, wire it into your Codex environment, and run your first session with best practice support in under five minutes."
 ---
 
-Describe how someone begins using your product. What is the first thing they need to do? Are there any prerequisites?
-
-A quickstart should take someone from zero to using your product. They'll get a quick win and a sense of what they can accomplish.
-
-## Prerequisites
-
-Before you begin, you must have:
-
-- Requirement one (for example, Node.js 18+, a free account, an API key)
-- Requirement two (for example, a compatible device, a compatible browser, a compatible operating system)
-
-## Get started
+This guide walks through installing the three CSBP files, wiring the entry point into your `AGENTS.md`, and verifying the setup works in a live Codex session. By the end you will have a functioning CSBP layer ready to accept its first practice formation pass whenever you need one.
 
 <Steps>
-  <Step title="Install">
-    Describe how to install your product or sign up.
+  <Step title="Get the files">
+    Copy `CSBP-entry-point.txt`, `shared-best-practice.txt`, and `shared-best-practice-compiler.txt` from the [CSBP repository](https://github.com/xxyoudeadpunkxx/csbp-codex-shared-best-practice) into your project. The recommended directory layout keeps all three files together under `.codex/memories/`:
 
-    ```bash
-    npm install your-package
+    ```text
+    .codex/
+      memories/
+        CSBP-entry-point.txt
+        shared-best-practice.txt
+        shared-best-practice-compiler.txt
     ```
+
+    Keeping them in a dedicated `memories/` directory separates CSBP from other Codex configuration and makes the load order easy to audit.
   </Step>
-  <Step title="Configure">
-    Describe any setup or configuration needed before first use.
 
-    ```bash
-    your-cli init
+  <Step title="Bootstrap from AGENTS.md">
+    Wire `CSBP-entry-point.txt` into your `.codex/AGENTS.md` so a fresh Codex session reads it before using CSBP. The reference should appear near the top of the file, before any task-specific instructions:
+
+    ```md
+    # AGENTS.md
+
+    ## Shared Best Practice
+
+    Read `.codex/memories/CSBP-entry-point.txt` before starting work.
+    Follow the load order and usage modes defined there.
     ```
+
+    The exact bootstrap line depends on your host environment contract. What matters is that `CSBP-entry-point.txt` is read first, every session, before any CSBP runtime behavior is expected.
   </Step>
-  <Step title="Run it">
-    Show the first thing a user does to see it working.
 
-    ```bash
-    your-cli start
+  <Step title="Verify the entry point loads">
+    When Codex reads `CSBP-entry-point.txt`, CSBP is active for the session. No special invocation is needed beyond the reference in `AGENTS.md`. The entry point defines the system, establishes the authority order, sets the read order, and routes Codex into runtime mode automatically.
+
+    After reading the entry point, Codex loads `shared-best-practice.txt` for runtime use. This happens as part of the normal session bootstrap — you do not need to ask for it separately.
+  </Step>
+
+  <Step title="Check the runtime file">
+    At this point `shared-best-practice.txt` contains no active practices. That is expected — the empty state is valid. The file begins with its header block and the role and authority definitions, but no promoted practice blocks appear yet.
+
+    The empty state marker from the file reads:
+
+    ```text
+    ENTRY
+    load through CSBP-entry-point.txt
     ```
+
+    If Codex reads the runtime file and finds no active relevant practices, it continues without CSBP runtime guidance. No active match means no forced behavior. An empty runtime file is a healthy starting state, not an error.
+  </Step>
+
+  <Step title="Open practice formation (when ready)">
+    The compiler is not loaded during normal runtime. `shared-best-practice-compiler.txt` stays out of the session until practice formation work is explicitly required.
+
+    When you are ready to evaluate a candidate practice — because you have noticed a recurring pattern, a repeated mistake, or a working default that keeps being rediscovered — ask Codex to evaluate it. For example:
+
+    ```
+    I keep running into this pattern: [describe the recurring issue].
+    Can you evaluate whether this belongs in CSBP?
+    ```
+
+    At that point, Codex reads `shared-best-practice-compiler.txt` and begins the formation pass: evaluating recurrence, scope, actionability, and authority fit, then proposing a normalized practice block for your review. Nothing enters `shared-best-practice.txt` until you approve it.
   </Step>
 </Steps>
 
-<Tip>
-  Give people a way to get help. This could be a link to a support page, a chat with a customer support agent, or a forum for your product.
+## What happens next
 
-  Example: Need help? Reach out to us at [support@yourcompany.com](mailto:support@yourcompany.com).
-</Tip>
+<CardGroup cols={2}>
+  <Card title="Practice Formation" icon="flask" href="/guides/practice-formation">
+    Learn how the compiler evaluates candidates, what gets admitted or rejected, and how to walk a pattern through the full formation lifecycle.
+  </Card>
+  <Card title="Runtime Behavior" icon="bolt" href="/concepts/runtime-behavior">
+    Understand how active practices are matched to current work, how the read order works, and what happens when there are no relevant active practices.
+  </Card>
+</CardGroup>
+
+<Note>
+`CSBP-entry-point.txt` and `shared-best-practice-compiler.txt` are fixed system-definition layers — never modify, rewrite, or extend them. All runtime practice changes belong in `shared-best-practice.txt`, and only after a practice has passed through the formation path with operator approval.
+</Note>

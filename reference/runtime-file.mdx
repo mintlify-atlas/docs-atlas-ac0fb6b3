@@ -1,0 +1,83 @@
+---
+title: "shared-best-practice.txt: Runtime Practice Store"
+sidebarTitle: "Runtime File"
+description: "Reference for shared-best-practice.txt — the mutable runtime layer that stores promoted practices and the rules that govern how they are read and applied."
+---
+
+`shared-best-practice.txt` is the only CSBP file that changes at runtime. It stores already-promoted practices in a fixed block shape and defines how Codex reads and applies them during a session. Changes to this file may only occur through the compiler path and with operator approval.
+
+## File identity
+
+| Property | Value |
+|----------|-------|
+| Name | `shared-best-practice.txt` |
+| Version | 0.1 |
+| Role | Runtime store for promoted practices |
+| Mutable | Yes — through compiler path and operator approval only |
+
+## Authority
+
+The runtime file does not redefine policy, scope, or authority. See [`CSBP-entry-point.txt`](/reference/entry-point) for the full authority order.
+
+## Read order
+
+When processing a practice block at runtime, Codex follows this sequence:
+
+1. Check `status`
+2. If status is `deprecated`, stop reading the block
+3. Check `applies_when`
+4. Use `goal` for interpretation
+5. Apply `do` as default action
+6. Use `avoid` as competing-pattern guard
+
+## Block shape
+
+Every promoted practice uses this fixed eight-field shape:
+
+```
+id: PNNN sequential practice identifier
+status: whether the practice is active for runtime use
+scope: whether the practice is global or environment-global
+kind: practice category used for interpretation
+applies_when: operational condition for relevance
+goal: intended operational effect
+do: primary default action
+avoid: recurring competing pattern
+```
+
+For full field definitions and validation rules, see the [Block Schema](/reference/block-schema) reference.
+
+## Status values
+
+| Value | Runtime behavior |
+|-------|-----------------|
+| `active` | Use at runtime when relevant |
+| `deprecated` | Exclude from runtime use; available for review only |
+
+## Scope values
+
+| Value | Meaning |
+|-------|---------|
+| `global` | Stable across work contexts |
+| `environment-global` | Stable across the current working environment across sessions |
+
+## Kind values
+
+| Value | Meaning |
+|-------|---------|
+| `environment` | Stable environment constraint or affordance |
+| `orientation` | Setup, framing, or initial approach |
+| `operation` | Execution step or working method during real work |
+| `verification` | Check, confirmation, or closure practice |
+
+## Write rule
+
+<Warning>
+Runtime practice changes must follow `shared-best-practice-compiler.txt`. Do not add, revise, deprecate, or remove a runtime practice without operator approval.
+</Warning>
+
+## Empty state
+
+<Note>
+The runtime file may contain no active practices. That is a valid state. Codex continues without CSBP guidance when there are no relevant active practices.
+</Note>

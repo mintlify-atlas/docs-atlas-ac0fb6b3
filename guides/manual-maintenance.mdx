@@ -1,0 +1,85 @@
+---
+title: "Manually Maintaining shared-best-practice.txt"
+sidebarTitle: "Manual Maintenance"
+description: "Edit shared-best-practice.txt directly using the documented block shape and promotion rules — the same admission standards still apply."
+---
+
+While the normal path for adding or changing a practice runs through the compiler and an explicit formation session, you can also edit `shared-best-practice.txt` directly. Manual does not mean casual. The same admission, rejection, normalization, authority, and approval constraints that govern the formation process still apply — you are just applying them yourself rather than asking Codex to do it. The standard does not change because the method does.
+
+## When manual maintenance makes sense
+
+Manual edits are appropriate in a small set of situations:
+
+- **Fixing a typo or stale wording** in an existing practice that does not change its meaning or scope.
+- **Adjusting a practice's wording** that has drifted — the intent is right but the language no longer matches how the work is described.
+- **Deprecating a practice** on direct operator instruction when the formation session is unnecessary for a straightforward status change.
+- **Removing a deprecated practice** on direct operator instruction after it has served its maintenance history purpose.
+- **Adding a practice when the session protocol is unavailable** — if you need to add a practice outside a live Codex session, you can do so manually as long as you apply the same rules the compiler would.
+
+## What you can edit
+
+<Note>
+  Only `shared-best-practice.txt` is editable. Never manually edit `CSBP-entry-point.txt` or `shared-best-practice-compiler.txt`. Those files are fixed system-definition layers. Changing them breaks the protocol guarantees that the rest of the system depends on.
+</Note>
+
+## Block shape requirements
+
+Every practice block in `shared-best-practice.txt` must follow this exact shape. All fields are required and must be non-empty:
+
+```
+id: PNNN
+status: active | deprecated
+scope: global | environment-global
+kind: environment | orientation | operation | verification
+applies_when: <operational condition>
+goal: <intended operational effect>
+do: <primary correct default action>
+avoid: <recurring wrong pattern>
+```
+
+A block with a missing field, an empty field, or an unrecognized field value is malformed. Codex may not apply it correctly, and it will not pass a manual validation check.
+
+## ID assignment
+
+IDs follow the `PNNN` sequential format — `P001`, `P002`, `P003`, and so on. When adding a new practice manually:
+
+- Scan the existing blocks to find the highest current id.
+- Assign the next sequential number.
+- The id must be unique. No two blocks may share an id.
+- An id is never reused — not even if the original block was removed. Sequential assignment is permanent.
+
+## Normalization rules to follow manually
+
+When writing or revising a block manually, apply the same normalization the compiler would:
+
+- **Write as a preventive default, not a recovery instruction.** The `do` field should describe what to do before a problem occurs, not what to do after it has.
+- **One pattern per block.** If you find yourself writing two distinct actions in `do` or two distinct failure patterns in `avoid`, split the block into two separate practices and evaluate each independently.
+- **Remove narrative and explanation.** The block fields are operational instructions, not documentation. Rationale, context, and background do not belong in the runtime block.
+- **Prefer short, stable wording with direct verbs.** Write "confirm X before Y" rather than "it would be advisable to consider confirming X when approaching Y."
+- **Avoid fallback phrasing.** Do not write "if possible" or "when applicable" — the `applies_when` field is what controls relevance. The `do` field should be unconditional within its activation condition.
+
+## Deprecation vs removal
+
+These are two distinct operations with different effects:
+
+- **Deprecation** — change `status` from `active` to `deprecated`. The block stays in the file. It is excluded from runtime use but remains visible for maintenance history. Use this when a practice no longer applies but you want to keep a record of it.
+- **Removal** — delete the block entirely from the file. Only do this on direct operator instruction. Removal is permanent — the block and its id are gone. It is appropriate when a deprecated practice no longer serves any maintenance reference purpose.
+
+When in doubt, deprecate rather than remove. Deprecated blocks are inert and do not affect runtime behavior.
+
+## Validation checklist
+
+<Accordion title="Before saving a manual change">
+  Run through this checklist before writing any manual change to `shared-best-practice.txt`:
+
+  - Does each block follow the full eight-field shape with no missing or empty fields?
+  - Is the practice recurring and global — not project-specific, session-specific, or a one-off?
+  - Is it actionable during real work — not diagnostic-only, recovery-only, or vague?
+  - Is it preventive by default — written as a forward-looking default, not a post-failure correction?
+  - Is it compatible with higher-authority instructions — no conflict with operator instruction, `AGENTS.md`, or local project guidance?
+  - Is the `id` unique and sequential — not duplicating an existing id and not skipping numbers without reason?
+</Accordion>
+
+<Warning>
+  Manual changes bypass the compiler evaluation step. The compiler would catch misclassified scope, overly narrow `applies_when` conditions, recovery-first framing, and blocked admission criteria before a practice ever reached the file. When editing manually, you are responsible for applying that same judgment. If you are uncertain whether a candidate meets the standard, use the formation process instead — it is there precisely to make that evaluation explicit.
+</Warning>

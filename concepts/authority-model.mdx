@@ -1,0 +1,72 @@
+---
+title: "Authority Model: Where CSBP Sits in the Hierarchy"
+sidebarTitle: "Authority Model"
+description: "CSBP is explicitly lower-authority than operator instruction, AGENTS.md, and local project instructions — and never overrides any of them."
+---
+
+CSBP has a fixed position in the Codex authority hierarchy. That position is below operator instruction, below `AGENTS.md`, and below local project instructions or project-local guidance. It does not move, it does not negotiate, and it does not override instructions from any higher-authority source. The authority order is defined in `CSBP-entry-point.txt` and holds for every session.
+
+## The authority chain
+
+The full authority chain, from highest to lowest:
+
+```text
+operator instruction
+AGENTS.md
+local project instructions or project-local guidance
+CSBP
+```
+
+Each level in the chain:
+
+- **Operator instruction** — direct instructions given by the operator during a session. Highest authority. Always takes precedence.
+- **AGENTS.md** — the host contract that defines how Codex behaves in a project or environment. Defines policy, scope, and behavioral defaults. CSBP is always below this.
+- **Local project instructions or project-local guidance** — project-scoped instructions that apply within a specific working context. More specific than `AGENTS.md` and still above CSBP.
+- **CSBP** — the shared best-practice layer. Applies already-promoted practices when relevant. Cannot override any of the levels above it.
+
+## Conflict resolution
+
+If any CSBP practice conflicts with operator instruction, `AGENTS.md`, or local project instructions, the rule is simple and non-negotiable:
+
+<Warning>
+  If a CSBP item conflicts with operator instruction, `AGENTS.md`, or local project instructions or project-local guidance, the conflicting CSBP item is not applied. CSBP never overrides higher-authority instructions. The conflict is resolved by not applying the CSBP item — not by weighing the two against each other.
+</Warning>
+
+There is no partial application of a conflicting practice. The conflicting item is skipped entirely for that context.
+
+## What CSBP cannot do
+
+- Redefine policy
+- Redefine scope
+- Redefine authority
+- Override higher-authority instructions
+- Create new policy authority for itself
+
+Runtime practices in `shared-best-practice.txt` are operational instructions, not policy declarations. They tell Codex what to do by default in a given operational condition. They do not establish rules that compete with the authority chain above them.
+
+## What CSBP can do
+
+- Apply already-approved practices when `applies_when` matches the current operation
+- Guide decisions when the operational condition of a practice is relevant to current work
+- Propose practice candidates for evaluation (with operator approval required before any candidate enters the runtime store)
+- Help surface recurring patterns that may deserve a stable operational default
+
+CSBP is a guidance layer, not a constraint layer. It adds useful defaults without taking authority away from higher-level instructions.
+
+## Why lower authority by design
+
+Placing CSBP below `AGENTS.md` — and below operator instruction — means the operator always has a clean override path. If a promoted practice turns out to be wrong, too broad, or no longer useful, the operator does not need to go through a formal process to stop it from applying. A direct instruction overrides it immediately.
+
+CSBP is a convenience layer, not a constraint. It persists useful operational defaults across sessions so they do not need to be rediscovered or restated every time. It does not hold those defaults with any authority that competes with the operator or the host contract.
+
+This also means CSBP is safe to add to a setup without restructuring anything. It slots below everything that already exists.
+
+## Compatibility note
+
+<Info>
+  If CSBP is your persistent best-practice layer, avoid running it alongside automatic memory systems that can also turn session carryover into future behavior — such as Codex Memories when used for the same job. Two persistence layers create unclear authority. It becomes ambiguous which layer owns a given operational default and what happens when they conflict. CSBP is designed to keep persistence explicit, reviewed, and operator-approved. A second automatic layer working in parallel undermines that design.
+</Info>
+
+<Card title="Runtime Behavior" icon="play" href="/concepts/runtime-behavior">
+  See how CSBP applies active practices during a live session — including read order, status handling, and mode separation.
+</Card>

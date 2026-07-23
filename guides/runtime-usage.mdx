@@ -1,0 +1,73 @@
+---
+title: "Using CSBP Practices During Live Codex Sessions"
+sidebarTitle: "Runtime Usage"
+description: "How CSBP applies promoted practices during normal Codex work — when they activate, how they guide decisions, and when they stay silent."
+---
+
+Once practices are promoted into `shared-best-practice.txt`, CSBP applies them passively during work. No special invocation is needed. At the start of each session, Codex reads `CSBP-entry-point.txt` first, then loads `shared-best-practice.txt`. As work proceeds, Codex checks each active practice's `applies_when` condition against the current operation — if a condition matches, the practice guides the decision. If nothing matches, CSBP stays silent.
+
+## How practices activate
+
+Codex applies a strict read order when evaluating each block in `shared-best-practice.txt`:
+
+1. **Check status** — if the block is `deprecated`, skip it entirely. Deprecated practices are not applied at runtime.
+2. **Check `applies_when`** — does the operational condition described in the field match what is happening right now?
+3. **Use `goal` to interpret the practice** — the goal field explains the intended effect and provides context for applying the practice correctly.
+4. **Apply `do` as the default action** — this is the primary instruction. When the practice is relevant, this is what Codex does.
+5. **Use `avoid` as the guard** — the avoid field names the recurring wrong pattern. It prevents regression to the old behavior.
+
+<Note>
+  If no active practice matches the current operation, Codex continues without CSBP runtime guidance. There is no forced behavior, no fallback practice, and no default intervention. An empty match is a clean pass-through.
+</Note>
+
+## Example: a practice in action
+
+Suppose `P001` is a verification practice with the following shape:
+
+```
+id: P001
+status: active
+scope: global
+kind: verification
+applies_when: finishing a task or change
+goal: ensure the change is observable before the task is closed
+do: confirm the change is visible before marking the task done
+avoid: closing the task without verifying the effect is visible
+```
+
+When Codex is about to close a task, the `applies_when` condition — "finishing a task or change" — matches the current operation. Codex applies the `do` instruction: confirm the change is visible before marking done. The `avoid` field acts as a guard, preventing Codex from closing without that confirmation step.
+
+If Codex were in the middle of drafting content or running a search, the `applies_when` condition would not match, and `P001` would not activate.
+
+## What runtime mode does not do
+
+<Warning>
+  Codex in runtime mode never creates, revises, promotes, deprecates, or removes practices. Modifying `shared-best-practice.txt` requires explicitly opening practice formation mode and receiving operator approval for every change. Runtime behavior is read-only with respect to the practice store.
+</Warning>
+
+## Reading deprecated practices
+
+Deprecated blocks remain in `shared-best-practice.txt` after deprecation — they are not deleted. During runtime, Codex skips any block with `status: deprecated` at the first read-order check. Deprecated practices do not influence behavior in any way.
+
+They remain in the file to support maintenance history: you can review them, understand why they were deprecated, and reference them if a similar candidate is raised in the future.
+
+## Scope in practice
+
+Each block carries a `scope` value that signals how broadly the practice applies:
+
+| Scope | Meaning in an active session |
+|---|---|
+| `global` | Always potentially relevant — this practice is stable across work contexts and is evaluated whenever its `applies_when` condition is checked. |
+| `environment-global` | Relevant across the current working environment across sessions — applies consistently within the environment where the practice was formed, regardless of the specific task or project. |
+
+Scope is an interpretation aid. The `applies_when` condition is still the primary activation gate — scope does not override it.
+
+## Checking active practices
+
+You can ask Codex to list or summarize the current active practices in `shared-best-practice.txt` at any time. This is a normal runtime operation and does not require opening formation mode. Codex will read the file and report which practices have `status: active`, along with their `applies_when` conditions and `kind` classifications.
+
+This gives you direct visibility into what is guiding work without needing to open the file manually.
+
+<Tip>
+  Periodically review active practices to check for staleness. Practices that no longer reflect how you work — because a tool changed, a workflow evolved, or an environment constraint shifted — should be deprecated. A stale practice that keeps activating is worse than no practice at all. Ask Codex to deprecate it and it will handle the change with your approval.
+</Tip>

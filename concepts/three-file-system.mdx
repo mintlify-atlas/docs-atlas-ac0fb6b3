@@ -1,0 +1,104 @@
+---
+title: "The Three-File System: How CSBP Is Structured"
+sidebarTitle: "Three-File System"
+description: "CSBP separates system definition, practice application, and practice formation into three distinct files — each with a locked role."
+---
+
+CSBP intentionally splits its responsibilities across three files so that system definition, runtime application, and practice formation can never collapse into each other. Each file has a fixed role it owns exclusively. None of the three borrows from the others at runtime, and none can be modified to take on a role that belongs to another. This separation is not a structural preference — it is the mechanism that keeps the system stable.
+
+## Why three files?
+
+Three jobs must stay permanently separate inside CSBP:
+
+1. **Define the system.** Explain what CSBP is, how it is loaded, and what authority it holds. This job belongs to the bootstrap layer.
+2. **Apply promoted practices.** Use only already-approved runtime instructions when they are relevant to current work. This job belongs to the runtime layer.
+3. **Form or revise practices.** Evaluate whether a recurring pattern deserves promotion into the runtime layer. This job belongs to the formation layer.
+
+Each job must stay with its designated file. A runtime layer that starts defining the system has overstepped its role. A system-definition layer that starts accepting new practices at runtime has become unstable. A formation layer that leaks evaluation logic into normal operation has blurred the line between draft and active guidance.
+
+<Warning>
+  If these three jobs collapse into each other — if any file takes on a role that belongs to another — CSBP stops being a controlled best-practice layer and starts behaving like an unstable second contract.
+</Warning>
+
+## File overview
+
+| File | Role | Read timing | Mutable at runtime |
+|---|---|---|---|
+| `CSBP-entry-point.txt` | Bootstrap and routing layer. Defines system identity, authority order, load order, mode routing, and write restrictions. | First, every session. | No |
+| `shared-best-practice.txt` | Runtime layer. Stores already-promoted practices that may guide live work when relevant. | After entry point. | Yes, but only through compiler path and operator approval. |
+| `shared-best-practice-compiler.txt` | Formation layer. Governs evaluation, normalization, promotion, revision, deprecation, removal, and rejection of candidate practices. | Only during practice formation work. | No during normal runtime. |
+
+## CSBP-entry-point.txt
+
+`CSBP-entry-point.txt` is the bootstrap and routing layer. It is the structural anchor of the entire system. Its job is to define what CSBP is, establish the authority order, set the read order for all three files, route Codex into the correct usage mode, and enforce write restrictions. It defines system identity so that no other file needs to — and so no other file can override it.
+
+The entry point covers:
+
+- System identity and object
+- Authority chain
+- Layer roles for all three files
+- Usage modes and when each activates
+- Entry decision and entry rule
+- Read order
+- System definition lock
+- Runtime, compiler, empty-state, conflict, and write rules
+
+The entry point is fixed. It is never modified, rewritten, or extended — not during runtime, not during practice formation, not manually. It is a system-definition layer, not a practice store.
+
+<Note>
+  `CSBP-entry-point.txt` is the first thing read every session. Reading it activates CSBP for the current session and determines which mode loads next.
+</Note>
+
+## shared-best-practice.txt
+
+`shared-best-practice.txt` is the runtime store for already-promoted practices. It is read after the entry point during every session and is the only file that changes during normal CSBP use — and only with operator approval after a practice has passed through the compiler.
+
+Active practices in this file may guide work when their `applies_when` condition matches the current operation. Deprecated practices remain in the file for review history but are excluded from runtime use.
+
+Each promoted practice uses this fixed block shape:
+
+```text
+id:           PNNN sequential practice identifier
+status:       whether the practice is active for runtime use
+scope:        whether the practice is global or environment-global
+kind:         practice category used for interpretation
+applies_when: operational condition for relevance
+goal:         intended operational effect
+do:           primary default action
+avoid:        recurring competing pattern
+```
+
+Only practices that have been evaluated, normalized, and approved by the operator enter this file. No practice writes itself in.
+
+## shared-best-practice-compiler.txt
+
+`shared-best-practice-compiler.txt` is the practice formation and evaluation layer. It governs how candidate practices are evaluated, normalized, promoted, revised, deprecated, removed, or rejected. It is the decision layer that determines whether a recurring pattern is strong enough, stable enough, and well-formed enough to enter the runtime store.
+
+The compiler is not loaded during normal runtime work. It is only activated when the operator explicitly starts practice formation or maintenance work. This keeps the layer light during ordinary sessions — the compiler's evaluation logic does not bleed into active runtime guidance.
+
+Like the entry point, the compiler file is fixed. It is never modified or extended at runtime. It is a system-definition layer that shapes what enters the runtime store, not a store itself.
+
+## Load order
+
+CSBP follows two distinct load paths depending on what kind of work is being done.
+
+**Runtime path** — used during normal work sessions:
+
+```text
+CSBP-entry-point.txt
+shared-best-practice.txt
+```
+
+**Formation path** — used only when the operator starts practice formation or maintenance work:
+
+```text
+CSBP-entry-point.txt
+shared-best-practice.txt
+shared-best-practice-compiler.txt
+```
+
+The compiler is never loaded into normal runtime behavior. Only the formation path activates it — and only when the operator asks for it.
+
+<Tip>
+  To understand where CSBP sits relative to operator instruction, `AGENTS.md`, and local project instructions, see [Authority Model](/concepts/authority-model).
+</Tip>

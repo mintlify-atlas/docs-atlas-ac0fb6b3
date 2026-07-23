@@ -1,0 +1,97 @@
+---
+title: "Practice Lifecycle: From Candidate to Promoted Practice"
+sidebarTitle: "Practice Lifecycle"
+description: "Every CSBP practice moves through a defined lifecycle — evaluate, normalize, promote or reject — with operator approval required at the promotion gate."
+---
+
+No practice enters the runtime file by accident. Every candidate follows a defined path from initial observation through evaluation and normalization to promotion or rejection. The path is not a formality — it is the filter that keeps `shared-best-practice.txt` clean, stable, and genuinely useful. Material that does not survive evaluation does not become a practice. Material that survives but lacks operator approval does not become a practice either.
+
+## The full lifecycle
+
+```text
+candidate  -> evaluate -> normalize -> promote | reject
+active     -> revise
+active     -> deprecate
+deprecated -> remove
+```
+
+Each transition:
+
+- **candidate → evaluate** — a potential practice is raised and assessed against admission and rejection criteria. The compiler determines whether it is recurring, global or environment-global, actionable, preventive, and authority-compatible.
+- **evaluate → normalize** — a candidate that passes evaluation is rewritten into runtime block shape: one pattern, direct verbs, no narrative, no fallback phrasing, preventive by default.
+- **normalize → promote** — a normalized candidate is proposed to the operator. If approved, it is assigned a `PNNN` id and enters `shared-best-practice.txt` as an active practice.
+- **normalize → reject** — a candidate that fails evaluation or cannot be normalized into a useful form is rejected. It does not enter the runtime store.
+- **active → revise** — an active practice can be revisited and reworded, re-scoped, or split. Revision follows the same compiler path and requires operator approval.
+- **active → deprecate** — an active practice that is no longer valid, no longer needed, or superseded can be deprecated. It becomes inactive but remains in the file for review.
+- **deprecated → remove** — a deprecated practice can be removed from `shared-best-practice.txt` entirely. Removal requires a direct operator instruction.
+
+## How a candidate enters
+
+Practice formation starts only when the operator asks for it. There are two common starting points:
+
+<Tabs>
+  <Tab title="Operator observation">
+    The operator notices a recurring issue and asks Codex to evaluate whether it belongs in CSBP. The observation might be a described pattern, a reported repeated mistake, a rough hypothesis, or a direct question about whether something should be a practice.
+
+    Codex checks the pattern against the compiler rules — admission criteria, rejection criteria, scope, authority compatibility — then proposes, revises, splits, narrows, or rejects the candidate based on what it finds. The operator does not need to write a formal proposal. Any observation that describes a recurring operational pattern is a valid starting point.
+  </Tab>
+  <Tab title="Session review">
+    After a block of work, the operator asks Codex to review the session for possible recurring practices. Codex looks at what happened during the session, identifies patterns that may be stable enough and broad enough to deserve promotion, and proposes candidates.
+
+    Codex may propose candidates. It does not promote them by itself. Every candidate that comes out of a session review still requires evaluation, normalization, and operator approval before it can enter the runtime store.
+  </Tab>
+</Tabs>
+
+## Evaluation
+
+When a candidate is under evaluation, the compiler assesses it against a defined set of admission criteria. A candidate is admitted only when it is:
+
+- **Recurring across sessions** — not a one-off or session-specific pattern
+- **Global or environment-global** — not tied to a single project or narrow context
+- **Actionable during real work** — expressible as an operational instruction, not a diagnostic note or policy statement
+- **Preventive by default** — frames the correct action rather than describing a recovery path
+- **Authority-compatible** — does not conflict with operator instruction, `AGENTS.md`, or local project instructions
+
+During evaluation the compiler may reinterpret the reported issue, identify the underlying pattern, split a candidate that contains multiple patterns, merge similar candidates, or narrow or broaden the formulation. The input does not need to be perfect — the compiler's job is to find the strongest defensible form of the pattern or determine that none exists.
+
+## Normalization
+
+A candidate that survives evaluation is normalized into runtime block shape. Normalization rules:
+
+- **Rewrite as a preventive default** — the practice should tell Codex what to do by default, not what to do after something goes wrong
+- **One pattern per practice** — if two distinct patterns are present, split them and evaluate each independently
+- **Remove narrative and non-operational explanation** — the block should contain instructions, not descriptions
+- **Prefer short stable wording** — practices need to be readable and applicable during real work
+- **Prefer direct verbs** — `do` and `avoid` fields use direct action language
+- **Avoid fallback phrasing** — do not frame the practice as a recovery action
+- **Avoid recovery-first phrasing** — the practice is not a troubleshooting guide
+
+A candidate that cannot be normalized into a clean block is revised until it can be, or rejected.
+
+## Promotion gate
+
+<Warning>
+  Only the operator can approve promotion. Codex proposes; the operator decides. A normalized candidate — no matter how well-formed — does not enter `shared-best-practice.txt` until the operator explicitly approves it. The `PNNN` id is assigned only at promotion, and only after operator approval. Codex never self-promotes a practice.
+</Warning>
+
+## Revision
+
+Active practices can be revised when their wording, scope, split, or kind is found to be wrong or no longer accurate. Revision follows the same path as initial formation: the practice goes back through the compiler, the revised form is normalized, and the operator approves the change before it takes effect in `shared-best-practice.txt`.
+
+A revision may result in a split if the original practice turns out to contain more than one distinct pattern. Each fragment is evaluated independently before any is promoted.
+
+## Deprecation and removal
+
+When an active practice is no longer valid — because the operational context has changed, because it conflicts with newer instruction, or because it has been superseded — it can be deprecated. Deprecation changes the `status` field from `active` to `deprecated`. The practice becomes inactive immediately. It is excluded from runtime use but remains in the file.
+
+Deprecated practices stay in `shared-best-practice.txt` so they are available during maintenance review. They do not vanish from the record.
+
+Removal is a separate step that goes further: the deprecated block is deleted from the file entirely. Removal is not automatic.
+
+<Info>
+  Removal requires explicit operator instruction. Practices are not removed automatically when deprecated, not removed during normal runtime use, and not removed by the compiler without being asked. If a deprecated practice should be removed, the operator must ask for it directly.
+</Info>
+
+<Card title="Practice Formation Guide" icon="hammer" href="/guides/practice-formation">
+  Step-by-step walkthrough of how to start a formation session, evaluate a candidate, and get a practice into the runtime store.
+</Card>
