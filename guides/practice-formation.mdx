@@ -1,5 +1,5 @@
 ---
-title: "Form and Promote a Best Practice with CSBP"
+title: "CSBP Practice Formation: Propose, Evaluate, and Promote"
 sidebarTitle: "Practice Formation"
 description: "Learn how to propose, evaluate, normalize, and promote a recurring operational pattern into CSBP's runtime layer with operator approval."
 ---
@@ -78,7 +78,7 @@ Formation is triggered in two common ways:
 
 When Codex presents a formation proposal, it uses this shape:
 
-```
+```text
 candidate:      short description of the pattern
 kind:           environment | orientation | operation | verification
 scope:          global | environment-global
@@ -104,7 +104,7 @@ The `id` is left unassigned in the proposal. It is assigned only when you approv
 
 **Compiler produces a normalized block draft:**
 
-```
+```text
 candidate:      confirm change visibility before closing a task
 kind:           verification
 scope:          global
@@ -122,7 +122,7 @@ proposed block:
 
 **Operator approves.** The block is assigned id `P001` and written to `shared-best-practice.txt`:
 
-```
+```text
 id: P001
 status: active
 scope: global
@@ -144,10 +144,14 @@ avoid: closing the task without verifying the effect is visible
   - **Vague** — cannot be applied as a concrete action during real work
   - **Diagnostic-only** — tells Codex how to identify a problem, not how to avoid it
   - **Recovery-only** — tells Codex how to fix a failure, not how to prevent it
+  - **Post-failure only** — addresses what to do after something went wrong, not how to prevent it
   - **Duplicate** — already covered by an existing practice, `AGENTS.md`, or a local instruction
   - **Too broad** — applies to so many situations it cannot match reliably
   - **Too narrow** — only meaningful in a single edge case that will not recur
   - **Conflicts with higher-authority instructions** — contradicts operator instruction, `AGENTS.md`, or local project guidance
+  - **Depends on hidden or unstable context** — relies on information that is not reliably available across sessions
+  - **Reads like explanation** — describes why something happens rather than giving an operational instruction
+  - **Reads like policy** — states a rule or principle rather than a concrete operational correction
 </Accordion>
 
 <Note>

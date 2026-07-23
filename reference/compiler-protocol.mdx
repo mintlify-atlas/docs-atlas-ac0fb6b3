@@ -30,10 +30,13 @@ description: "Reference for the CSBP compiler — the fixed formation layer that
 **The compiler is not for:**
 
 - Replacing `AGENTS.md`
+- Replacing local project instructions or project-local guidance
 - Storing project-specific instructions
 - Storing policy, tone, or style guidance
 - Storing one-off fixes
+- Storing recovery-only logic
 - Storing speculative advice
+- Storing broad behavioral framing
 
 ## Input types
 
@@ -47,15 +50,24 @@ The compiler accepts the following inputs from the operator:
 - Reported recurring omission
 - Reported recurring missed opportunity during real work
 
-## Compiler decisions
+## Discussion
 
-There are five possible decision outcomes:
+When working with a candidate, the compiler protocol may:
 
-- **`promote`** — candidate is ready for runtime use and enters `shared-best-practice.txt`
-- **`revise`** — candidate is valid but wording, scope, or split needs work; revision happens in the same working pass
-- **`reject`** — candidate is not suitable for shared runtime practice
-- **`deprecate`** — active practice becomes deprecated; excluded from runtime use
-- **`remove`** — deprecated or invalid practice is deleted from `shared-best-practice.txt`
+- Reinterpret the reported issue
+- Identify the likely underlying pattern
+- Split multiple patterns
+- Merge similar patterns
+- Narrow or broaden the formulation
+- Classify the issue as operational-level, policy-level, project-specific, or too weak in recurrence, scope, or clarity for promotion
+
+## External check
+
+The compiler may suggest a lightweight web check when outside recurrence could materially clarify the decision. An external check is optional and is for practical corroboration, not proof. Prefer primary practical sources with direct relevance — sources close to the real environment, tool, workflow, or issue being discussed. Avoid broad or unnecessary research.
+
+## Admission and rejection criteria
+
+See the [Admission Criteria](/reference/admission-criteria) reference for the full list of admit and reject criteria.
 
 ## Normalization rules
 
@@ -71,6 +83,23 @@ Candidate practices must be normalized before promotion. The compiler applies th
 - Prefer direct verbs
 - Avoid fallback phrasing
 - Avoid recovery-first phrasing
+
+## Block shape
+
+Every promoted practice uses this fixed eight-field shape:
+
+```text
+id
+status
+scope
+kind
+applies_when
+goal
+do
+avoid
+```
+
+For full field definitions and validation rules, see the [Block Schema](/reference/block-schema) reference.
 
 ## Field rules
 
@@ -102,23 +131,85 @@ Candidate practices must be normalized before promotion. The compiler applies th
   State the recurring wrong pattern.
 </ParamField>
 
+## Scope values
+
+| Value | Meaning |
+|-------|---------|
+| `global` | Stable across work contexts |
+| `environment-global` | Stable across the current working environment across sessions |
+
+## Kind rules
+
+| Value | Use for |
+|-------|---------|
+| `environment` | Stable environment conditions, constraints, or affordances |
+| `orientation` | Setup, framing, or initial approach during real work |
+| `operation` | Operational actions or working methods during real work |
+| `verification` | Checking, confirmation, or closure practices |
+
 ## Block quality rules
 
 <Note>
-One practice = one recurring pattern. Split if more than one main action or wrong pattern is present. Rewrite or reject if too broad, too narrow, overly explanatory, or not usable during real work.
+One practice = one recurring pattern. Split if more than one main action or wrong pattern is present. Rewrite or reject if too broad, too narrow, overly explanatory, or not usable during real work. If revise produces a split, evaluate each fragment independently before promotion.
 </Note>
+
+## Compiler decisions
+
+There are five possible decision outcomes:
+
+- **`promote`** — candidate is ready for runtime use and enters `shared-best-practice.txt`
+- **`revise`** — candidate is valid but wording, scope, or split needs work; revision happens in the same working pass
+- **`reject`** — candidate is not suitable for shared runtime practice
+- **`deprecate`** — active practice becomes deprecated; excluded from runtime use
+- **`remove`** — deprecated or invalid practice is deleted from `shared-best-practice.txt`
+
+## Proposal shape
+
+Formation proposals use this shape:
+
+```text
+candidate:      short description of the pattern
+kind:           environment | orientation | operation | verification
+scope:          global | environment-global
+rationale:      one short operational sentence
+proposed block: full block shape draft
+```
+
+The `id` field is left unassigned until operator-approved promotion.
 
 ## Lifecycle
 
-```
+```text
 candidate  -> evaluate -> normalize -> promote | reject
 active     -> revise
 active     -> deprecate
 deprecated -> remove
 ```
 
+## Runtime maintenance
+
+Runtime maintenance operations are:
+
+- Revise active practice
+- Deprecate active practice
+- Remove deprecated or invalid practice
+
 ## Maintenance rule
 
 <Warning>
 All runtime practice maintenance uses this compiler protocol. Revisions, status changes, and removals all require operator approval. Practices are not removed automatically.
 </Warning>
+
+## Remove rule
+
+- Remove a deprecated practice only on direct operator instruction
+- Remove an invalid active practice only on direct operator instruction
+- Do not remove a runtime practice during normal runtime use
+
+## Promotion
+
+Only promoted practices enter `shared-best-practice.txt`.
+
+## Runtime relation
+
+`shared-best-practice.txt` is the runtime layer loaded after `CSBP-entry-point.txt`. Apply active practices only when relevant. Do not let runtime practices override operator instruction, `AGENTS.md`, or local project instructions or project-local guidance.

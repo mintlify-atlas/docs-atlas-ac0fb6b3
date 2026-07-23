@@ -19,6 +19,13 @@ description: "Reference for shared-best-practice.txt — the mutable runtime lay
 
 The runtime file does not redefine policy, scope, or authority. See [`CSBP-entry-point.txt`](/reference/entry-point) for the full authority order.
 
+## Use
+
+- Apply only when `applies_when` matches current work
+- Active entries guide current work decisions
+- Deprecated entries do not guide runtime use
+- Deprecated entries remain available for review only
+
 ## Read order
 
 When processing a practice block at runtime, Codex follows this sequence:
@@ -34,7 +41,7 @@ When processing a practice block at runtime, Codex follows this sequence:
 
 Every promoted practice uses this fixed eight-field shape:
 
-```
+```text
 id: PNNN sequential practice identifier
 status: whether the practice is active for runtime use
 scope: whether the practice is global or environment-global

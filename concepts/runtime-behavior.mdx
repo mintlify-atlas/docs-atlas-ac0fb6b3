@@ -1,7 +1,7 @@
 ---
 title: "Runtime Behavior: How CSBP Applies Practices During Work"
 sidebarTitle: "Runtime Behavior"
-description: "During a live session, CSBP reads active practices from shared-best-practice.txt and applies them only when their applies_when condition matches the current work."
+description: "CSBP reads active practices from shared-best-practice.txt each session and applies them only when their applies_when condition matches the current work."
 ---
 
 During normal work, CSBP does not create new practices. It does not evaluate candidates, it does not revise existing entries, and it does not write anything to any file. It only applies already-promoted active practices — and only when their `applies_when` condition matches the current operation. If no active practice is relevant, CSBP contributes nothing to the session and Codex continues without it.

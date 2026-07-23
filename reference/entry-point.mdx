@@ -31,7 +31,7 @@ No prior CSBP context is assumed at the start of a session. CSBP behavior must n
 
 CSBP is lower-authority than the operating contract around it. The full authority chain is:
 
-```
+```text
 operator instruction > AGENTS.md > local project instructions or project-local guidance > CSBP
 ```
 
@@ -53,6 +53,18 @@ The entry point defines two distinct modes of operation:
 
 - **Practice formation mode** — use `shared-best-practice-compiler.txt` for practice formation work. This mode is loaded only when the operator explicitly opens practice formation or maintenance work (evaluate, normalize, revise, promote, deprecate, remove, or reject).
 
+## Practice formation work
+
+Practice formation work covers these operations:
+
+- evaluate
+- normalize
+- revise
+- promote
+- deprecate
+- remove
+- reject
+
 ## Entry rules
 
 The following rules are defined in the ENTRY RULE and ENTRY DECISION sections of the file:
@@ -70,6 +82,32 @@ The following rules are defined in the ENTRY RULE and ENTRY DECISION sections of
 2. Read `shared-best-practice.txt` for runtime use
 3. Read `shared-best-practice-compiler.txt` only for practice formation work
 
+## System definition lock
+
+`CSBP-entry-point.txt` and `shared-best-practice-compiler.txt` are fixed system-definition layers. They must not be modified, rewritten, or extended. They must not be treated as mutable during runtime use or practice formation work.
+
+## Runtime rule
+
+- Apply active practices from `shared-best-practice.txt` only when relevant
+- Do not apply deprecated practices
+- Do not use runtime practices to override higher-authority instructions
+- Do not use runtime practices as policy, scope, or authority definitions
+
+## Compiler rule
+
+- Use `shared-best-practice-compiler.txt` only for practice formation work
+- Do not read `shared-best-practice-compiler.txt` during normal runtime use
+- Do not use compiler logic as runtime guidance
+- Do not treat compiler logic as automatically active practice
+
+## Empty state
+
+If `shared-best-practice.txt` contains no active relevant practices, continue without CSBP runtime guidance. If no candidate practice is under discussion, do not load compiler logic into runtime behavior.
+
+## Conflict rule
+
+If any CSBP item conflicts with operator instruction, `AGENTS.md`, or local project instructions or project-local guidance, do not apply the conflicting CSBP item.
+
 ## Write restrictions
 
 <Warning>
@@ -82,7 +120,3 @@ The WRITE RULE from `CSBP-entry-point.txt` applies at all times:
 - Do not promote a practice without operator approval
 - Do not deprecate or remove a practice without operator approval
 </Warning>
-
-## Conflict rule
-
-If any CSBP item conflicts with operator instruction, `AGENTS.md`, or local project instructions or project-local guidance, do not apply the conflicting CSBP item.
